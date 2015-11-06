@@ -10,64 +10,56 @@
 FxA Server
 ----------
 
-**Command-line**::
+**Command-line**:
+    ``> FxA-server X A P``
 
-    > FxA-server X A P
-
-    + X: the port number at which the FxA-server’s UDP socket should bind to (odd number)
-    + A: the IP address of NetEmu
-    + P: the UDP port number of NetEmu
+    + ``X``: the port number at which the FxA-server’s UDP socket should bind to (odd number)
+    + ``A``: the IP address of NetEmu
+    + ``P``: the UDP port number of NetEmu
 
 **Command**:
 
-+ Configure receiver maximum transfer window for the server::
++ Configure receiver maximum transfer window for the server:
+    ``> window W``
 
-    > window W
+    - ``W``: the maximum receiver’s window-size at the FxA-Server (in segments).
 
-    - W: the maximum receiver’s window-size at the FxA-Server (in segments).
-
-+ Shut down FxA-Server gracefully::
-
-    > terminate
++ Shut down FxA-Server gracefully:
+    ``> terminate``
 
 
 FxA Client
 ----------
 
-**Command-line**::
+**Command-line**:
+    ``> FxA-client X A P``
 
-    > FxA-client X A P
+    + ``X``: the port number at which the FxA-client’s UDP socket should bind to (even number),
+         this port number should be equal to the server’s port number minus 1.
 
-    + X: the port number at which the FxA-client’s UDP socket should bind to (even number). Please remember that this port number should be equal to the server’s port number minus 1.
+    + ``A``: the IP address of NetEmu
 
-    + A: the IP address of NetEmu
-
-    + P: the UDP port number of NetEmu
+    + ``P``: the UDP port number of NetEmu
 
 **Command**:
 
-+ The FxA-client connects to the FxA-server (running at the same IP host)::
++ The FxA-client connects to the FxA-server (running at the same IP host):
+    ``> connect``
 
-    > connect
++ The FxA-client downloads file from the server:
+    ``> get F``
 
-+ The FxA-client downloads file from the server::
+    - ``F``: the file to be downloaded (if ``F`` exists in the same directory with the FxA-server program)
 
-    > get F
++ The FxA-client uploads file to the server:
+    ``> post F``
 
-    - F: the file to be downloaded (if F exists in the same directory with the FxA-server program)
+    - ``F``: the file to be uploaded (if ``F`` exists in the same directory with the FxA-client program)
 
-+ The FxA-client uploads file to the server::
++ Configure maximum receiver window size for the client:
+    ``> window W``
 
-    > post F
+    - ``W``: the maximum receiver’s window-size at the FxA-Client (in segments).
 
-    - F: the file to be uploaded (if F exists in the same directory with the FxA-client program)
-
-+ Configure maximum receiver window size for the client::
-
-    > window W
-
-    - W: the maximum receiver’s window-size at the FxA-Client (in segments).
-
-+ The FxA-client terminates gracefully from the FxA-server::
-
-    > disconnect
++ The FxA-client terminates gracefully from the FxA-server:
+    ``> disconnect``
