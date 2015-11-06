@@ -34,8 +34,7 @@ FxA Client
 **Command-line**:
     ``> FxA-client X A P``
 
-    + ``X``: the port number at which the FxA-client’s UDP socket should bind to (even number),
-         this port number should be equal to the server’s port number minus 1.
+    + ``X``: the port number at which the FxA-client’s UDP socket should bind to (even number), this port number should be equal to the server’s port number minus 1.
 
     + ``A``: the IP address of NetEmu
 
@@ -43,15 +42,15 @@ FxA Client
 
 **Command**:
 
-+ The FxA-client connects to the FxA-server (running at the same IP host):
++ FxA-client connects to the FxA-server (running at the same IP host):
     ``> connect``
 
-+ The FxA-client downloads file from the server:
++ FxA-client downloads file from the server:
     ``> get F``
 
     - ``F``: the file to be downloaded (if ``F`` exists in the same directory with the FxA-server program)
 
-+ The FxA-client uploads file to the server:
++ FxA-client uploads file to the server:
     ``> post F``
 
     - ``F``: the file to be uploaded (if ``F`` exists in the same directory with the FxA-client program)
@@ -61,5 +60,5 @@ FxA Client
 
     - ``W``: the maximum receiver’s window-size at the FxA-Client (in segments).
 
-+ The FxA-client terminates gracefully from the FxA-server:
++ FxA-client terminates gracefully from the FxA-server:
     ``> disconnect``
