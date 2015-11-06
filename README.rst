@@ -1,3 +1,5 @@
+:Authors: Lovissa Winyoto (lwinyoto3@gatech.edu), Yoel Ivan (yivan3@gatech.edu)
+
 ====================================
 **RxP** - Reliable Transfer Protocol
 ====================================
@@ -8,57 +10,57 @@
 FxA Server
 ----------
 
-**Command-line:** 
-    ``> FxA-server X A P``
+**Command-line:**
+    $ FxA-server X A P
 
-    + ``X``: the port number at which the FxA-server’s UDP socket should bind to (odd number) 
+    + ``X``: the port number at which the FxA-server’s UDP socket should bind to (odd number)
 
     + ``A``: the IP address of NetEmu
-        
-    + ``P``: the UDP port number of NetEmu 
+
+    + ``P``: the UDP port number of NetEmu
 
 **Command:**
 
 + Configure receiver maximum transfer window for the server:
-    ``> window W``    
+    $ window W
 
-    - ``W``: the maximum receiver’s window-size at the FxA-Server (in segments). 
+    - ``W``: the maximum receiver’s window-size at the FxA-Server (in segments).
 
 + Shut down FxA-Server gracefully:
-    ``> terminate``
-    
+    $ terminate
+
 
 FxA Client
 ----------
 
-**Command-line:** 
-    ``> FxA-client X A P`` 
+**Command-line:**
+    $ FxA-client X A P
 
-    + ``X``: the port number at which the FxA-client’s UDP socket should bind to (even number). Please remember that this port number should be equal to the server’s port number minus 1. 
+    + ``X``: the port number at which the FxA-client’s UDP socket should bind to (even number). Please remember that this port number should be equal to the server’s port number minus 1.
 
     + ``A``: the IP address of NetEmu
-        
-    + ``P``: the UDP port number of NetEmu 
+
+    + ``P``: the UDP port number of NetEmu
 
 **Command:**
-    
+
 + The FxA-client connects to the FxA-server (running at the same IP host):
-	``> connect`` 
+    $ connect
 
 + The FxA-client downloads file from the server:
-	``> get F`` 
-    
+    $ get F
+
     - ``F``: the file to be downloaded (if ``F`` exists in the same directory with the FxA-server program)
-    
+
 + The FxA-client uploads file to the server:
-	``> post F``
-    
+    $ post F
+
     - ``F``: the file to be uploaded (if ``F`` exists in the same directory with the FxA-client program)
 
 + Configure maximum receiver window size for the client:
-	``> window W``
+    $ window W
 
-    - ``W``: the maximum receiver’s window-size at the FxA-Client (in segments). 
-    
+    - ``W``: the maximum receiver’s window-size at the FxA-Client (in segments).
+
 + The FxA-client terminates gracefully from the FxA-server:
-	``> disconnect`` 
+    $ disconnect
