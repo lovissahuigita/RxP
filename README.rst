@@ -18,15 +18,15 @@ FxA Server
     + A: the IP address of NetEmu
     + P: the UDP port number of NetEmu
 
-**Command**::
+**Command**:
 
-+ Configure receiver maximum transfer window for the server:
++ Configure receiver maximum transfer window for the server::
 
     > window W
 
     - W: the maximum receiver’s window-size at the FxA-Server (in segments).
 
-+ Shut down FxA-Server gracefully:
++ Shut down FxA-Server gracefully::
 
     > terminate
 
@@ -44,7 +44,7 @@ FxA Client
 
     + P: the UDP port number of NetEmu
 
-**Command**::
+**Command**:
 
 + The FxA-client connects to the FxA-server (running at the same IP host)::
 
@@ -64,7 +64,7 @@ FxA Client
 
 + Configure maximum receiver window size for the client::
 
-    $ window W
+    > window W
 
     - W: the maximum receiver’s window-size at the FxA-Client (in segments).
 
