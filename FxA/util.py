@@ -4,7 +4,10 @@ import sys
 
 
 class util(object):
+    TEXT_ENCODING = 'utf-8'
+    ERROR_TAG = '[ERROR] '
     __util_logger = None
+
 
     @classmethod
     def setup_logger(cls):
@@ -27,7 +30,7 @@ class util(object):
     @classmethod
     def parse_args(cls, port_num, ne_ip, ne_port):
         cls.__util_logger.info(
-            'NetEmu: ' + str(ne_ip) + ':' + str(ne_port) + ' client port: ' +
+            'NetEmu: ' + str(ne_ip) + ':' + str(ne_port) + ' port: ' +
             str(port_num))
         try:
             port_num = int(port_num)
@@ -73,3 +76,14 @@ class PortNumberInvalid(Exception):
 
 class InvalidIP4Format(Exception):
     pass
+
+
+class ArgumentCountException(Exception):
+    def __init__(self, commandname = '', argcountreq = 1, argsymbol = ()):
+        self.__name = str(commandname)
+        self.__reqcount = int(argcountreq)
+        self.__argsymbol = argsymbol
+
+    def __str__(self):
+        return '\'' + self.__name + '\' requires ' + str(self.__reqcount) + \
+               ' argument(s) ' + str(self.__argsymbol)
