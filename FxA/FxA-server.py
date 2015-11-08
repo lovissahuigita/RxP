@@ -1,7 +1,6 @@
 import argparse
 import logging
 import re
-
 from FxA.sock import sock
 from FxA.util import util
 
@@ -33,27 +32,12 @@ def main():
     prompt_user_command()
 
 
-def command_conn(*_):
-    __logger.info('running command \'connect\'')
-    __socket.connect(__ne_addr)
-
-
-def command_get(F):
-    __logger.info('running command \'get\'')
-    pass
-
-
-def command_post(F):
-    __logger.info('running command \'post\'')
-    pass
-
-
 def command_wind(W):
     __logger.info('running command \'window\'')
     pass
 
 
-def command_disconn(*_):
+def command_term(*_):
     __logger.info('running command \'disconnect\'')
     pass
 
@@ -63,29 +47,20 @@ def command_help(*_):
     pass
 
 
-def command_exit(*_):
-    __logger.info('running command \'exit\'')
-    exit()
-
-
 def help_message():
-    print('Type \'help\' for list of command, \'exit\' to quit.')
+    print('Type \'help\' for list of command.')
 
 
 __command_dict = {
-    'connect'   : command_conn,
-    'get'       : command_get,
-    'post'      : command_post,
     'window'    : command_wind,
-    'disconnect': command_disconn,
-    'help'      : command_help,
-    'exit'      : command_exit
+    'terminate': command_term,
+    'help'      : command_help
 }
 
 
 def prompt_user_command():
     while True:
-        user_input = re.split('\s+', input('FxA client > '), maxsplit=1)
+        user_input = re.split('\s+', input('FxA server > '), maxsplit=1)
         __logger.debug(str(user_input))
         if user_input[0] in __command_dict:
             __command_dict.get(user_input[0])(
@@ -97,23 +72,17 @@ def prompt_user_command():
 
 def setup_cl_parser():
     parser = argparse.ArgumentParser(description='Parse command-line '
-                                                     'arguments')
+                                                 'arguments')
     parser.add_argument('X', type=int, help='port number at which the '
-                                                'FxA-client’s UDP socket '
-                                                'should '
-                                                'bind to (even number), '
-                                                'this port '
-                                                'number should be equal to '
-                                                'the '
-                                                'server’s port number minus '
-                                                '1');
+                                            'FxA-server’s UDP socket '
+                                            'should '
+                                            'bind to (odd number)');
     parser.add_argument('A', type=str, help='the IP address of NetEmu')
     parser.add_argument('P', type=int, help='UDP port number of NetEmu')
 
     # action store_true to make the the args.verbose == false if not specified
-    parser.add_argument('-v', '--verbose', help='print out process '
-                                                    'messages',
-                            action='store_true')
+    parser.add_argument('-v', '--verbose', help='print out process messages',
+                        action='store_true')
     return parser
 
 
