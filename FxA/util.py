@@ -1,13 +1,15 @@
 import logging
+import os
 import re
 import sys
+import traceback
 
 
+# House many shared or common functions
 class util(object):
     TEXT_ENCODING = 'utf-8'
     ERROR_TAG = '[ERROR] '
     __util_logger = None
-
 
     @classmethod
     def setup_logger(cls):
@@ -69,6 +71,94 @@ class util(object):
             raise
         return port_num, (ne_ip, ne_port)
 
+    @classmethod
+    def upload(cls, socket, filename):
+        filesize = os.path.getsize(filename)
+        cls.send_msg('SIZE ' + str(filesize), socket)
+
+        cls.__util_logger.debug('Reading ' + filename)
+        filehandle = open(filename, 'rb')
+        cls.__util_logger.debug(str(filehandle))
+        bytetotalsent = int(0)
+        while bytetotalsent < filesize:
+            dataread = filehandle.read(1024)
+            bytesent = int(0)
+            byteread = len(dataread)
+            cls.__util_logger.debug('read ' + str(byteread) + ' bytes')
+            while bytesent < byteread:
+                bytesent += socket.send(dataread[bytesent:])
+                cls.__util_logger.debug(
+                    'sent: ' + str(bytetotalsent) + '/' + str(filesize))
+            bytetotalsent += bytesent
+        cls.__util_logger.debug('sent: ' + str(bytetotalsent) + '/' +
+                                str(filesize))
+        filehandle.close()
+        print(filename + ' sent!')
+
+    @classmethod
+    def download(cls, socket, filename):
+        filesize = re.split('\s+', cls.recv_msg(socket), maxsplit=1)
+        cls.__util_logger.debug(str(filesize))
+        if len(filesize) == 2 and filesize[0] == 'SIZE':
+            try:
+                filesize = int(filesize[1])
+            except:
+                cls.__logger.debug('\n' + traceback.format_exc())
+                raise UnexpectedMessage
+        else:
+            raise UnexpectedMessage
+
+        cls.__util_logger.debug('Writing ' + filename + ' of size ' +
+                                str(filesize) + ' bytes')
+        filehandle = open(filename, 'wb')
+        cls.__util_logger.debug(str(filehandle))
+        bytetotalwritten = int(0)
+        while bytetotalwritten < filesize:
+            datarcvd = socket.recv(4096)
+            bytewritten = int(0)
+            bytercvd = len(datarcvd)
+            cls.__util_logger.debug('received ' + str(bytercvd) + ' bytes')
+            while bytewritten < bytercvd:
+                bytewritten += filehandle.write(datarcvd[bytewritten:])
+                cls.__util_logger.debug(
+                    'writting ' + str(bytetotalwritten) + '/' + str(filesize))
+            bytetotalwritten += bytewritten
+        cls.__util_logger.debug(
+            'writting ' + str(bytetotalwritten) + '/' + str(filesize))
+        filehandle.close()
+        print(filename + ' received!')
+
+    @classmethod
+    def send_msg(cls, msg, socket):
+        sent = int(0)
+        msg += '\n'
+        cls.__util_logger.debug('sending ' + msg)
+        msg = msg.encode(cls.TEXT_ENCODING)
+        msglen = len(msg)
+        while sent < msglen:
+            sent += socket.send(msg[sent:])
+
+    @classmethod
+    def recv_msg(cls, socket):
+        msg = socket.recv(1)
+        if len(msg) == 0:
+            cls.__util_logger.debug(msg)
+            raise NoMoreMessage
+        decoded = msg.decode(cls.TEXT_ENCODING)
+        while not decoded[len(decoded) - 1] == '\n':
+            msg = socket.recv(1)
+            if len(msg) == 0:
+                cls.__util_logger.debug(msg)
+                raise NoMoreMessage
+            decoded += msg.decode(cls.TEXT_ENCODING)
+        cls.__util_logger.debug(decoded)
+        return decoded.strip()
+
+
+# raised when '\n' has not been received but sender no longer sending file
+class NoMoreMessage(Exception):
+    pass
+
 
 class PortNumberInvalid(Exception):
     pass
@@ -78,8 +168,12 @@ class InvalidIP4Format(Exception):
     pass
 
 
+class UnexpectedMessage(object):
+    pass
+
+
 class ArgumentCountException(Exception):
-    def __init__(self, commandname = '', argcountreq = 1, argsymbol = ()):
+    def __init__(self, commandname='', argcountreq=1, argsymbol=()):
         self.__name = str(commandname)
         self.__reqcount = int(argcountreq)
         self.__argsymbol = argsymbol

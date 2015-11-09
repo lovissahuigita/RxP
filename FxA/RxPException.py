@@ -1,5 +1,4 @@
 class RxPException(Exception):
-
     # Form -> errno: errmsg
     ERROR = {
         100: 'Port number in use (cannot bind error).',
@@ -9,6 +8,8 @@ class RxPException(Exception):
         104: 'Socket is already connected.',
         105: 'Socket already bound.',
         106: 'Socket is in use.',
+        107: 'Connection force closed by peer.',
+        108: ''
     }
 
     def __init__(self, errno):
