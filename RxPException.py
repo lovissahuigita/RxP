@@ -4,7 +4,7 @@ class RxPException(Exception):
         100: 'Port number in use (cannot bind error).',
         101: 'Connection refused (no listening socket exists).',
         102: 'Not connected (no connection error).',
-        103: 'Socket already closed.',
+        103: 'Socket is already closed.',
         104: 'Socket is already connected.',
         105: 'Socket already bound.',
         106: 'Socket is in use.',

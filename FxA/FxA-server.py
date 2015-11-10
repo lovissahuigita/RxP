@@ -10,7 +10,6 @@ __logger = None
 __portNum = None
 __socket = None
 __serving_thread = None
-__terminate_lock = None
 __terminated = False
 
 
@@ -23,7 +22,6 @@ def main():
     global __portNum
     global __socket
     global __serving_thread
-    global __terminate_lock
 
     __logger = util.setup_logger()
     if args.verbose:
@@ -37,7 +35,6 @@ def main():
     __socket = sock(ne_addr)
     __socket.bind(('', __portNum))
     __socket.listen(65535)
-    __terminate_lock = Lock()
     __serving_thread = Thread(None, serve_client, 'client-server')
     help_message()
     __serving_thread.start()
@@ -62,13 +59,8 @@ def proccess_client(client_sock, msg):
 
 def serve_client():
     while True:
-        __logger.info('acquiring __terminate_lock')
-        __terminate_lock.acquire()
         if __terminated:
-            __terminate_lock.release()
             break
-        __logger.info('releasing __terminate_lock')
-        __terminate_lock.release()
 
         try:
             print('Waiting for client...')
@@ -102,14 +94,10 @@ def command_wind(W):
 # this is still very very wrong need confirmation on what it does!
 def command_term(*_):
     __logger.info('running command \'terminate\'')
-    __logger.info('acquiring __terminate_lock')
-    __terminate_lock.acquire()
     __socket.close()
     # make sure all serving thread is done serving
     global __terminated
     __terminated = True
-    __logger.info('releasing __terminate_lock')
-    __terminate_lock.release()
     print('waiting for serving thread...')
     __serving_thread.join()
     print('exitting...')

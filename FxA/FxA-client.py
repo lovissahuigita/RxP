@@ -2,7 +2,6 @@ import argparse
 import logging
 import re
 import traceback
-from threading import Lock
 
 from FxA.RxPException import RxPException
 from FxA.sock import sock
