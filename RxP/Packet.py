@@ -1,7 +1,6 @@
 class Packet:
     # class attributes here
-
-
+    
     def __init__(self):
         # instance attributes here
         __sourcePort 	    =
@@ -19,19 +18,6 @@ class Packet:
         __typeBits	        =
         __data		        =
 
-    # generate checksum for given data
-    def __computeChecksum(cls, data)
-
-    # validate data integrity
-    def validateChecksum()
-
-    # breakdown data into packets
-    def packetize
-
-    # create a selective retransmit request to the sender
-    def makeFastRetransmitPacket(ackNum)
-
-    def makeHiPacket(self, srcPort, destPort, seqNum = 0):
 
 
 
