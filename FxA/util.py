@@ -26,7 +26,7 @@ class util(object):
 
     @staticmethod
     def exit_error(msg):
-        print('[ERROR] ' + msg, file=sys.stderr)
+        print('[ERROR] ' + msg, file = sys.stderr)
         exit()
 
     @classmethod

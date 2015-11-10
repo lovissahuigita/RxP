@@ -1,3 +1,3 @@
-__author__ = 'lovissa'
+__author__ = 'Lovissa Winyoto'
 
 class RxProtocol:
