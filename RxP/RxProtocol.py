@@ -1,9 +1,9 @@
-__author__ = 'Lovissa Winyoto'
-
 import socket
 
-class rxprotocol:
+__author__ = 'Lovissa Winyoto'
 
+
+class rxprotocol:
     __sockets = {}
     udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 

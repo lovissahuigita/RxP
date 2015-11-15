@@ -1,3 +1,31 @@
+# raised when '\n' has not been received but sender no longer sending file
+class NoMoreMessage(Exception):
+    pass
+
+
+class PortNumberInvalid(Exception):
+    pass
+
+
+class InvalidIP4Format(Exception):
+    pass
+
+
+class UnexpectedMessage(object):
+    pass
+
+
+class ArgumentCountException(Exception):
+    def __init__(self, commandname='', argcountreq=1, argsymbol=()):
+        self.__name = str(commandname)
+        self.__reqcount = int(argcountreq)
+        self.__argsymbol = argsymbol
+
+    def __str__(self):
+        return '\'' + self.__name + '\' requires ' + str(self.__reqcount) + \
+               ' argument(s) ' + str(self.__argsymbol)
+
+
 class RxPException(Exception):
     # Form -> errno: errmsg
     ERROR = {

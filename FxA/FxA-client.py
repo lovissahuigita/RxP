@@ -3,13 +3,13 @@ import logging
 import re
 import traceback
 
-from FxA.RxPException import RxPException
 from FxA.sock import sock
-from FxA.util import util, ArgumentCountException
+from FxA.util import Util
+from exception import ArgumentCountException, RxPException
 
 __logger = None
-__portNum = None
-__ne_addr = None
+__portNum = int
+__ne_addr = (str, int)
 __socket = None
 
 
@@ -23,14 +23,14 @@ def main():
     global __socket
     global __logger
 
-    __logger = util.setup_logger()
+    __logger = Util.setup_logger()
     if args.verbose:
         __logger.setLevel(logging.DEBUG)
     else:
         __logger.setLevel(logging.ERROR)
-    __portNum, __ne_addr = util.parse_args(args.X, args.A, args.P)
+    __portNum, __ne_addr = Util.parse_args(args.X, args.A, args.P)
     if __portNum % 2 == 1:
-        util.exit_error('X has to be even number')
+        Util.exit_error('X has to be even number')
 
     newsocketbind()
     help_message()
@@ -43,7 +43,7 @@ def newsocketbind():
         __socket = sock(__ne_addr)
         __socket.bind(('', __portNum))
     except RxPException as err:
-        util.exit_error(str(err))
+        Util.exit_error(str(err))
 
 
 def help_message():
@@ -69,10 +69,10 @@ def command_conn(*_):
                 else:
                     raise
     except RxPException as err:
-        print(util.ERROR_TAG + str(err))
+        print(Util.ERROR_TAG + str(err))
     except OSError:
         __logger.debug('\n' + traceback.format_exc())
-        print(util.ERROR_TAG + 'unable to make connection')
+        print(Util.ERROR_TAG + 'unable to make connection')
 
 
 def command_get(F):
@@ -82,17 +82,17 @@ def command_get(F):
         if len(F) == 0:
             __logger.debug(str(F))
             raise ArgumentCountException('get', 1, 'F')
-        util.send_msg('GET ' + F, __socket)
+        Util.send_msg('GET ' + F, __socket)
         F = re.split('/', F)
         F = 'cfile/' + F[len(F) - 1]
-        util.download(__socket, F)
+        Util.download(__socket, F)
     except RxPException as err:
-        print(util.ERROR_TAG + str(err))
+        print(Util.ERROR_TAG + str(err))
     except ArgumentCountException as err:
-        print(util.ERROR_TAG + str(err))
+        print(Util.ERROR_TAG + str(err))
     except OSError:
         __logger.debug('\n' + traceback.format_exc())
-        print(util.ERROR_TAG + 'please run \'connect\' command first.')
+        print(Util.ERROR_TAG + 'please run \'connect\' command first.')
 
 
 def command_post(F):
@@ -104,15 +104,15 @@ def command_post(F):
             raise ArgumentCountException('post', 1, 'F')
         sF = re.split('/', F)
         sF = 'sfile/' + sF[len(sF) - 1]
-        util.send_msg('POST ' + sF, __socket)
-        util.upload(__socket, F)
+        Util.send_msg('POST ' + sF, __socket)
+        Util.upload(__socket, F)
     except RxPException as err:
-        print(util.ERROR_TAG + str(err))
+        print(Util.ERROR_TAG + str(err))
     except ArgumentCountException as err:
-        print(util.ERROR_TAG + str(err))
+        print(Util.ERROR_TAG + str(err))
     except OSError:
         __logger.debug('\n' + traceback.format_exc())
-        print(util.ERROR_TAG + 'please run \'connect\' command first.')
+        print(Util.ERROR_TAG + 'please run \'connect\' command first.')
 
 
 # need review
@@ -123,7 +123,7 @@ def command_wind(W):
             raise ArgumentCountException('window', 1, ('W'))
         __socket.set_buffer_size(int(W))
     except ArgumentCountException as err:
-        print(util.ERROR_TAG + str(err))
+        print(Util.ERROR_TAG + str(err))
 
 
 def command_disconn(*_):
@@ -135,7 +135,7 @@ def command_disconn(*_):
               'the same socket.')
     except OSError:
         __logger.debug('\n' + traceback.format_exc())
-        print(util.ERROR_TAG + 'please run \'connect\' command first.')
+        print(Util.ERROR_TAG + 'please run \'connect\' command first.')
 
 
 def command_help(*_):
@@ -177,7 +177,7 @@ def prompt_user_command():
             __command_dict.get(user_input[0])(
                 user_input[1] if len(user_input) > 1 else '')
         else:
-            print(util.ERROR_TAG + 'Invalid command \'' + str(user_input[0])
+            print(Util.ERROR_TAG + 'Invalid command \'' + str(user_input[0])
                   + '\'')
             help_message()
 

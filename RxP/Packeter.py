@@ -1,9 +1,9 @@
-__author__ = 'Lovissa Winyoto'
-
 from RxP.Packet import Packet
 
-class Packeter:
+__author__ = 'Lovissa Winyoto'
 
+
+class Packeter:
     MSS = 544  # in bytes
 
     # breakdown data into packets
@@ -17,7 +17,8 @@ class Packeter:
         end = (cls.MSS if len(data) >= cls.MSS else len(data)) - 1
         while leftover > 0:
             seq_num += end
-            new_packet = cls.__compute_checksum(Packet(src_port, dst_port, seq_num, ack_num, data[start:end]))
+            new_packet = cls.__compute_checksum(
+                Packet(src_port, dst_port, seq_num, ack_num, data[start:end]))
             packet_list.append(new_packet)
             leftover -= (end - start + 1)
             # update the index
@@ -42,13 +43,15 @@ class Packeter:
     # create a YO packet
     @classmethod
     def yo(cls, src_port, dst_port, seq_num, ack_num):
-        yo = cls.__compute_checksum(Packet(src_port, dst_port, seq_num, ack_num, None))
+        yo = cls.__compute_checksum(
+            Packet(src_port, dst_port, seq_num, ack_num, None))
         yo.set_yo()
         return yo
 
     # create a CYA packet
     @classmethod
     def cya(cls, src_port, dst_port, seq_num, ack_num):
-        cya = cls.__compute_checksum(Packet(src_port, dst_port, seq_num, ack_num, None))
+        cya = cls.__compute_checksum(
+            Packet(src_port, dst_port, seq_num, ack_num, None))
         cya.set_cya()
         return cya

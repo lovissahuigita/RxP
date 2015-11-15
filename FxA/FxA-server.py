@@ -1,10 +1,10 @@
 import argparse
 import logging
 import re
-from threading import Thread, Lock
-from FxA.RxPException import RxPException
+from threading import Thread
 from FxA.sock import sock
-from FxA.util import util, NoMoreMessage
+from FxA.util import Util
+from exception import NoMoreMessage, RxPException
 
 __logger = None
 __portNum = None
@@ -23,14 +23,14 @@ def main():
     global __socket
     global __serving_thread
 
-    __logger = util.setup_logger()
+    __logger = Util.setup_logger()
     if args.verbose:
         __logger.setLevel(logging.DEBUG)
     else:
         __logger.setLevel(logging.ERROR)
-    __portNum, ne_addr = util.parse_args(args.X, args.A, args.P)
+    __portNum, ne_addr = Util.parse_args(args.X, args.A, args.P)
     if __portNum % 2 == 0:
-        util.exit_error('X has to be odd number')
+        Util.exit_error('X has to be odd number')
 
     __socket = sock(ne_addr)
     __socket.bind(('', __portNum))
@@ -42,8 +42,8 @@ def main():
 
 
 __client_command_dict = {
-    'POST': util.download,
-    'GET' : util.upload
+    'POST': Util.download,
+    'GET' : Util.upload
 }
 
 
@@ -62,12 +62,14 @@ def serve_client():
         if __terminated:
             break
 
+        client_addr = None
+
         try:
             print('Waiting for client...')
             served_socket, client_addr = __socket.accept()
             print('Serving ' + str(client_addr))
             while True:
-                decoded = util.recv_msg(served_socket)
+                decoded = Util.recv_msg(served_socket)
                 print(decoded)
                 proccess_client(served_socket, decoded)
         except RxPException as err:
@@ -75,7 +77,7 @@ def serve_client():
                 print('stop listening...')
                 break
             else:
-                print(util.ERROR_TAG + str(err))
+                print(Util.ERROR_TAG + str(err))
         except NoMoreMessage:
             pass
         print('Finished serving ' + str(client_addr))
@@ -129,7 +131,7 @@ def prompt_user_command():
             __command_dict.get(user_input[0])(
                 user_input[1] if len(user_input) > 1 else '')
         else:
-            print(util.ERROR_TAG + 'Invalid command \'' + str(user_input[0])
+            print(Util.ERROR_TAG + 'Invalid command \'' + str(user_input[0])
                   + '\'')
             help_message()
 

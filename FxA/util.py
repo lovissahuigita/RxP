@@ -3,10 +3,12 @@ import os
 import re
 import sys
 import traceback
-
-
 # House many shared or common functions
-class util(object):
+from exception import NoMoreMessage, PortNumberInvalid, InvalidIP4Format, \
+    UnexpectedMessage
+
+
+class Util(object):
     TEXT_ENCODING = 'utf-8'
     ERROR_TAG = '[ERROR] '
     __util_logger = None
@@ -26,7 +28,7 @@ class util(object):
 
     @staticmethod
     def exit_error(msg):
-        print('[ERROR] ' + msg, file = sys.stderr)
+        print('[ERROR] ' + msg, file=sys.stderr)
         exit()
 
     @classmethod
@@ -103,7 +105,7 @@ class util(object):
             try:
                 filesize = int(filesize[1])
             except:
-                cls.__logger.debug('\n' + traceback.format_exc())
+                cls.__util_logger.debug('\n' + traceback.format_exc())
                 raise UnexpectedMessage
         else:
             raise UnexpectedMessage
@@ -153,31 +155,3 @@ class util(object):
             decoded += msg.decode(cls.TEXT_ENCODING)
         cls.__util_logger.debug(decoded)
         return decoded.strip()
-
-
-# raised when '\n' has not been received but sender no longer sending file
-class NoMoreMessage(Exception):
-    pass
-
-
-class PortNumberInvalid(Exception):
-    pass
-
-
-class InvalidIP4Format(Exception):
-    pass
-
-
-class UnexpectedMessage(object):
-    pass
-
-
-class ArgumentCountException(Exception):
-    def __init__(self, commandname='', argcountreq=1, argsymbol=()):
-        self.__name = str(commandname)
-        self.__reqcount = int(argcountreq)
-        self.__argsymbol = argsymbol
-
-    def __str__(self):
-        return '\'' + self.__name + '\' requires ' + str(self.__reqcount) + \
-               ' argument(s) ' + str(self.__argsymbol)
