@@ -32,8 +32,8 @@ def main():
     if __portNum % 2 == 0:
         Util.exit_error('X has to be odd number')
 
-    __socket = sock(ne_addr)
-    __socket.bind(('', __portNum))
+    __socket = sock(__portNum, ne_addr)
+    __socket.bind(('', 8000))
     __socket.listen(65535)
     __serving_thread = Thread(None, serve_client, 'client-server')
     help_message()

@@ -1,12 +1,14 @@
 # socket wrapper
 # map tcp socket function call to rxp socket function call
 import socket
-from FxA.RxPException import RxPException
+
+from exception import RxPException
 
 
 class sock:
-    def __init__(self, proxy_addr=('127.0.0.1', 13000)):
-        self.__proxy_addr = None
+    def __init__(self, udp_port, proxy_addr=('127.0.0.1', 13000)):
+        self.__udp_port = udp_port
+        self.__proxy_addr = proxy_addr
         try:
             self.__s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except:
@@ -45,7 +47,7 @@ class sock:
 
     def accept(self):
         try:
-            ret = sock(self.__proxy_addr)
+            ret = sock(self.__udp_port, self.__proxy_addr)
             ret.__s, client_addr = self.__s.accept()
             ret.__proxy_addr = self.__proxy_addr
             return ret, client_addr

@@ -1,22 +1,18 @@
 class Packet:
-    # class attributes here
-    
+
     def __init__(self, src_port, dst_port, seq_num, ack_num, data):
-        # instance attributes here
         self.__src_port = src_port
         self.__dst_port = dst_port
         self.__seq_num = seq_num
         self.__ack_num = ack_num
 
-        # number of packet to be retransmitted starting at seqNum ACK
-        # maybe should be as big as window size
         self.__recv_window_size = 0
         self.__checksum	= 0
 
-        # ACK, HI, BYE, RST, FRR (Fast Retransmit Request)
         self.__yo = False
         self.__cya = False
-        self.__ack = 0
+        self.__ack = False
+
         self.__data = data
 
     def get_data(self):
@@ -25,7 +21,7 @@ class Packet:
     def get_dst_port(self):
         return self.__dst_port
 
-    def get_drc_port(self):
+    def get_src_port(self):
         return self.__src_port
 
     def get_checksum(self):

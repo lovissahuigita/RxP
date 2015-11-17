@@ -3,14 +3,15 @@ import os
 import re
 import sys
 import traceback
-# House many shared or common functions
 from exception import NoMoreMessage, PortNumberInvalid, InvalidIP4Format, \
     UnexpectedMessage
 
 
+# Housed many shared or common functions
 class Util(object):
     TEXT_ENCODING = 'utf-8'
     ERROR_TAG = '[ERROR] '
+
     __util_logger = None
 
     @classmethod
@@ -26,9 +27,9 @@ class Util(object):
         cls.__util_logger.info("logger set up!")
         return cls.__util_logger
 
-    @staticmethod
-    def exit_error(msg):
-        print('[ERROR] ' + msg, file=sys.stderr)
+    @classmethod
+    def exit_error(cls, msg):
+        print(cls.ERROR_TAG + msg, file=sys.stderr)
         exit()
 
     @classmethod
@@ -36,6 +37,7 @@ class Util(object):
         cls.__util_logger.info(
             'NetEmu: ' + str(ne_ip) + ':' + str(ne_port) + ' port: ' +
             str(port_num))
+
         try:
             port_num = int(port_num)
             if (port_num < 0) or (port_num > 65535):
@@ -71,6 +73,7 @@ class Util(object):
             cls.exit_error(str(ne_port) + ' is not in valid port number range')
         except:
             raise
+
         return port_num, (ne_ip, ne_port)
 
     @classmethod
@@ -82,6 +85,7 @@ class Util(object):
         filehandle = open(filename, 'rb')
         cls.__util_logger.debug(str(filehandle))
         bytetotalsent = int(0)
+
         while bytetotalsent < filesize:
             dataread = filehandle.read(1024)
             bytesent = int(0)
@@ -92,6 +96,7 @@ class Util(object):
                 cls.__util_logger.debug(
                     'sent: ' + str(bytetotalsent) + '/' + str(filesize))
             bytetotalsent += bytesent
+
         cls.__util_logger.debug('sent: ' + str(bytetotalsent) + '/' +
                                 str(filesize))
         filehandle.close()
@@ -101,6 +106,7 @@ class Util(object):
     def download(cls, socket, filename):
         filesize = re.split('\s+', cls.recv_msg(socket), maxsplit=1)
         cls.__util_logger.debug(str(filesize))
+
         if len(filesize) == 2 and filesize[0] == 'SIZE':
             try:
                 filesize = int(filesize[1])
@@ -115,6 +121,7 @@ class Util(object):
         filehandle = open(filename, 'wb')
         cls.__util_logger.debug(str(filehandle))
         bytetotalwritten = int(0)
+
         while bytetotalwritten < filesize:
             datarcvd = socket.recv(4096)
             bytewritten = int(0)
@@ -125,6 +132,7 @@ class Util(object):
                 cls.__util_logger.debug(
                     'writting ' + str(bytetotalwritten) + '/' + str(filesize))
             bytetotalwritten += bytewritten
+
         cls.__util_logger.debug(
             'writting ' + str(bytetotalwritten) + '/' + str(filesize))
         filehandle.close()

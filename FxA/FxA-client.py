@@ -40,8 +40,7 @@ def main():
 def newsocketbind():
     try:
         global __socket
-        __socket = sock(__ne_addr)
-        __socket.bind(('', __portNum))
+        __socket = sock(__portNum, __ne_addr)
     except RxPException as err:
         Util.exit_error(str(err))
 
@@ -52,14 +51,14 @@ def help_message():
 
 def command_conn(*_):
     __logger.info('running command \'connect\'')
-    __logger.debug('connecting to ' + str(('127.0.0.1', __portNum + 1)))
+    __logger.debug('connecting to ' + str(('127.0.0.1', int(8000))))
 
     try:
         connected = False
         while not connected:
             try:
                 __logger.debug('attempting to make connection')
-                __socket.connect(('127.0.0.1', __portNum + 1))
+                __socket.connect(('127.0.0.1', int(8000)))
                 connected = True
             except RxPException as err:
                 if err.errno() == 103:
